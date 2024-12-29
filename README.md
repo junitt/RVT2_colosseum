@@ -54,8 +54,8 @@ If you find our work useful, please consider citing our:
 - **Step 1 (Optional):**
 We recommend using [conda](https://docs.conda.io/en/latest/miniconda.html) and creating a virtual environment.
 ```
-conda create --name rvt python=3.8
-conda activate rvt
+conda create --name rvt2 python=3.8
+conda activate rvt2
 ```
 
 - **Step 2:** Install PyTorch. Make sure the PyTorch version is compatible with the CUDA version. One recommended version compatible with CUDA 11.1 and PyTorch3D can be installed with the following command. More instructions to install PyTorch can be found [here](https://pytorch.org/).
