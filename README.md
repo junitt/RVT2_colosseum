@@ -54,18 +54,14 @@ If you find our work useful, please consider citing our:
 - **Step 1 (Optional):**
 We recommend using [conda](https://docs.conda.io/en/latest/miniconda.html) and creating a virtual environment.
 ```
-conda create --name rvt2 python=3.8
+conda remove --name rvt2 --all
+conda create --name rvt2 python=3.9
 conda activate rvt2
 ```
 
 - **Step 2:** Install PyTorch. Make sure the PyTorch version is compatible with the CUDA version. One recommended version compatible with CUDA 11.1 and PyTorch3D can be installed with the following command. More instructions to install PyTorch can be found [here](https://pytorch.org/).
 ```
-conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch
-```
-
-Recently, we noticed an issue  while using conda to install PyTorch. More details can be found [here](https://github.com/pytorch/pytorch/issues/123097). If you face the same issue, you can use the following command to install PyTorch using pip.
-```
-pip install torch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 --index-url https://download.pytorch.org/whl/cu113
+pip install torch==1.12.1+cu116 torchvision==0.13.1+cu116 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu116
 ```
 
 - **Step 3:** Install PyTorch3D. 
@@ -77,7 +73,16 @@ One recommended version that is compatible with the rest of the library can be i
 curl -LO https://github.com/NVIDIA/cub/archive/1.10.0.tar.gz
 tar xzf 1.10.0.tar.gz
 export CUB_HOME=$(pwd)/cub-1.10.0
-pip install 'git+https://github.com/facebookresearch/pytorch3d.git@stable'
+```
+```
+conda install -c iopath iopath
+conda install jupyter
+pip install scikit-image matplotlib imageio plotly opencv-python-headless
+
+conda install -c fvcore -c conda-forge fvcore
+pip install black usort flake8 flake8-bugbear flake8-comprehensions
+
+pip install --no-index --no-cache-dir pytorch3d -f https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu116_pyt1121/download.html
 ```
 
 - **Step 4:** Install CoppeliaSim. PyRep requires version **4.1** of CoppeliaSim. Download and unzip CoppeliaSim: 
@@ -98,12 +103,15 @@ Remember to source your .bashrc (`source ~/.bashrc`) or  .zshrc (`source ~/.zshr
 - **Step 5:** Clone the repository with the submodules using the following command.
 
 ```
-git clone --recurse-submodules git@github.com:NVlabs/RVT.git && cd RVT && git submodule update --init
+git clone --recurse-submodules https://github.com/junitt/RVT2_colosseum.git && cd RVT2_colosseum && git submodule update --init
 ```
 
 Now, locally install the repository. You can either `pip install -e '.[xformers]'` to install the library with [xformers](https://github.com/facebookresearch/xformers) or `pip install -e .` to install without it. We recommend using the former as improves speed. However, sometimes the installation might fail due to the xformers dependency. In that case, you can install the library without xformers. The performance difference between the two is minimal but speed could be slower without xformers.
 ```
-pip install -e '.[xformers]' 
+pip install -e .
+wget https://anaconda.org/xformers/xformers/0.0.22/download/linux-64/xformers-0.0.22-py39_cu11.6.2_pyt1.12.1.tar.bz2
+conda install --use-local ./xxx
+consider using local file to install xformers
 ```
 
 Install, required libraries for PyRep, RLBench, YARR, PerAct Colab, and Point Renderer.
@@ -113,6 +121,7 @@ pip install -e rvt/libs/RLBench
 pip install -e rvt/libs/YARR 
 pip install -e rvt/libs/peract_colab
 pip install -e rvt/libs/point-renderer
+pip install numpy==1.26.4
 ``` 
  
 - **Step 6:** Download dataset.
@@ -128,7 +137,7 @@ pip install -e rvt/libs/point-renderer
 
 To train RVT-2 on all RLBench tasks, use the following command (from folder `RVT/rvt`):
 ```
-python train.py --exp_cfg_path configs/rvt2.yaml --mvt_cfg_path mvt/configs/rvt2.yaml --device 0,1,2,3,4,5,6,7 
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5 python train.py --exp_cfg_path configs/rvt2.yaml --mvt_cfg_path mvt/configs/rvt2.yaml --device 0,1,2,3,4,5
 ```
 
 ##### Training RVT

@@ -23,7 +23,10 @@ requirements = [
     "matplotlib",
     "bitsandbytes==0.38.1",
     "transforms3d",
-    "clip @ git+https://github.com/openai/CLIP.git",
+    "ftfy",
+    "openai-clip",
+    "triton"
+    # "clip @ git+https://github.com/openai/CLIP.git",
 ]
 
 __version__ = "0.0.1"
@@ -46,7 +49,7 @@ setup(
     install_requires=requirements,
     extras_require={
         "xformers": [
-            "xformers @ git+https://github.com/facebookresearch/xformers.git@main#egg=xformers",
+            "xformers @ git+https://github.com/facebookresearch/xformers.git@v0.0.19#egg=xformers",
         ]
     },
 )

@@ -144,7 +144,7 @@ def experiment(rank, cmd_args, devices, port):
     ddp = len(devices) > 1
     ddp_utils.setup(rank, world_size=len(devices), port=port)
 
-    exp_cfg = exp_cfg_mod.get_cfg_defaults()
+    exp_cfg = exp_cfg_mod.get_cfg_defaults()#读取config.py文件中的内容
     if cmd_args.exp_cfg_path != "":
         exp_cfg.merge_from_file(cmd_args.exp_cfg_path)
     if cmd_args.exp_cfg_opts != "":
@@ -306,6 +306,10 @@ if __name__ == "__main__":
 
     devices = cmd_args.device.split(",")
     devices = [int(x) for x in devices]
-
+    print(devices)
     port = (random.randint(0, 3000) % 3000) + 27000
-    mp.spawn(experiment, args=(cmd_args, devices, port), nprocs=len(devices), join=True)
+    if len(devices)>1:
+        mp.spawn(experiment, args=(cmd_args, devices, port), nprocs=len(devices), join=True)
+    else:
+        print("running use single thread")
+        experiment(0 , cmd_args , devices, port)
